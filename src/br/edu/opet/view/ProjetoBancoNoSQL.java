@@ -95,12 +95,12 @@ public class ProjetoBancoNoSQL {
 							opcao2: switch (tOpcao2) {
 
 							case 1:
-
+                                
 								LocalDateTime tDataMensagem = LocalDateTime.now();
 
 								System.out.println();
 								String tPara = Leitor.readString("Para:");
-
+                                //Destinatario não pode ser vazia
 								if (tPara == "") {
 									break opcao2;
 								}
@@ -110,14 +110,14 @@ public class ProjetoBancoNoSQL {
 								if (tMensagem == "") {
 									break opcao2;
 								}
-
+                                //tornando unico
 								tJedis.sadd(tApelido1 + ":" + tDataMensagem.format(sFormatadorDataeHora) + ":Para",
 										tPara);
 								tJedis.set(tApelido1 + ":" + tDataMensagem.format(sFormatadorDataeHora) + ":De",
 										tApelido1);
 								tJedis.set(tApelido1 + ":" + tDataMensagem.format(sFormatadorDataeHora) + ":Mensagem",
 										tMensagem);
-
+                                //incrementando
 								Long increm = tJedis.incr(tApelido1);
 								tJedis.zadd(tApelido1, increm,
 										tApelido1 + ":" + tDataMensagem.format(sFormatadorDataeHora));
