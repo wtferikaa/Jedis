@@ -3,7 +3,7 @@ package br.edu.opet.view;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+
 
 
 import br.edu.opet.util.Leitor;
@@ -25,7 +25,7 @@ public class ProjetoBancoNoSQL {
 		menu1: while (true) {
 			System.out.println("MENU");
 			System.out.println("1- Cadastrar usuário");
-			System.out.println("2- Enviar mensagem");
+			System.out.println("2- Entrar no perfil");
 			System.out.println("4 - Sair");
 
 			int tOpcao = Leitor.readInt("Entre com a opção desejada:");
@@ -57,6 +57,7 @@ public class ProjetoBancoNoSQL {
 					tJedis.hset("Usuario:" + tApelido, "Nome", tNome);
 					tJedis.hset("Usuario:" + tApelido, "Apelido", tApelido);
 					tJedis.hset("Usuario:" + tApelido, "DataCadastro", tDataCadastro.format(sFormatador));
+					System.out.println("Usuário cadastrado com sucesso");
 
 					break opcao;
 				}
@@ -66,7 +67,7 @@ public class ProjetoBancoNoSQL {
 			case 2:// enviando mensagem e chorando
 				while (true) {
 					System.out.println();
-					System.out.println("Menu de mensagens");
+					System.out.println("Perfil");
 					String tApelido1 = Leitor.readString("Apelido:");
 					if (tApelido1 == "") {
 						break opcao;
