@@ -133,11 +133,11 @@ public class ProjetoBancoNoSQL {
 								String[] SepararTexto = tDestinatario.split(",");
 								for (int i = 0; i < SepararTexto.length; i++) {
 									
-									Long tEntrada = tJedis.incr(SepararTexto[i] + "--ent  ");
+									Long tEntrada = tJedis.incr(SepararTexto[i] + "--entr  ");
 
 									//System.out.println(SepararTexto[i] + "-entrada  " + tEntrada + ":"+ tApelidoInformado + ":" + tDataMensagem.format(sFormatadorDataeHora));
 
-									tJedis.zadd(SepararTexto[i] + "--ent", tEntrada, tApelidoInformado + ":" + tDataMensagem.format(sFormatadorDataeHora));
+									tJedis.zadd(SepararTexto[i] + "--entr ", tEntrada, tApelidoInformado + ":" + tDataMensagem.format(sFormatadorDataeHora));
 								}
 
 								break opcao2;
@@ -146,7 +146,7 @@ public class ProjetoBancoNoSQL {
 								System.out.println("Visualizar mensagens recebidas");
 
 								// zlexcount pois o count normal não está funcionando
-								Long contarEntrada = tJedis.zlexcount(tApelidoInformado + "--ent ", "-", "+");
+								Long contarEntrada = tJedis.zlexcount(tApelidoInformado + "--entr ", "-", "+");
 								System.out.println("Você tem " + contarEntrada + " mensagens!");
 
 								if (contarEntrada == 0) {
@@ -155,7 +155,7 @@ public class ProjetoBancoNoSQL {
 								} else {
 									for (int i = 0; i < contarEntrada; i++) {
 										System.out.println(
-												(1 + i) + " " + tJedis.zrange(tApelidoInformado + "--ent  ", i, i));
+												(1 + i) + " " + tJedis.zrange(tApelidoInformado + "--entr ", i, i));
 									}
 									System.out.println();
 
@@ -165,7 +165,7 @@ public class ProjetoBancoNoSQL {
 										break opcao2;
 									} else {
 										Set<String> tVerMensagem = tJedis.zrange(
-												tApelidoInformado + "--ent  ", tVisualizar - 1, tVisualizar - 1);
+												tApelidoInformado + "--entr ", tVisualizar - 1, tVisualizar - 1);
 
 										String cortarString = tVerMensagem.toString();
 										String tVerMensagem2 = cortarString.substring(1, cortarString.length() - 1);
@@ -207,9 +207,9 @@ public class ProjetoBancoNoSQL {
 											tJedis.zadd(tApelidoInformado + "--saida ", tSaida2, tApelidoInformado + ":"
 													+ tDataMensagem2.format(sFormatadorDataeHora));
 
-											Long tEntrada2 = tJedis.incr(tDestinatario2 + "-ent  ");
+											Long tEntrada2 = tJedis.incr(tDestinatario2 + "-entr ");
 
-											tJedis.zadd(tDestinatario2 + "--ent  ", tEntrada2, tApelidoInformado
+											tJedis.zadd(tDestinatario2 + "--entr ", tEntrada2, tApelidoInformado
 													+ ":" + tDataMensagem2.format(sFormatadorDataeHora));
 
 										}
