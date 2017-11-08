@@ -126,18 +126,18 @@ public class ProjetoBancoNoSQL {
 										+ ":Mensagem", tMensagem);
 
 								// incrementando
-								Long tSaida = tJedis.incr(tApelidoInformado + "-saida");
+								Long tSaida = tJedis.incr(tApelidoInformado + "--saida");
 
-								tJedis.zadd(tApelidoInformado + "-saida ", tSaida, tApelidoInformado + ":" + tDataMensagem.format(sFormatadorDataeHora));
+								tJedis.zadd(tApelidoInformado + "--saida ", tSaida, tApelidoInformado + ":" + tDataMensagem.format(sFormatadorDataeHora));
 
 								String[] SepararTexto = tDestinatario.split(",");
 								for (int i = 0; i < SepararTexto.length; i++) {
 									
-									Long tEntrada = tJedis.incr(SepararTexto[i] + "-entrada ");
+									Long tEntrada = tJedis.incr(SepararTexto[i] + "--ent  ");
 
 									//System.out.println(SepararTexto[i] + "-entrada  " + tEntrada + ":"+ tApelidoInformado + ":" + tDataMensagem.format(sFormatadorDataeHora));
 
-									tJedis.zadd(SepararTexto[i] + "-entrada  ", tEntrada, tApelidoInformado + ":" + tDataMensagem.format(sFormatadorDataeHora));
+									tJedis.zadd(SepararTexto[i] + "--ent", tEntrada, tApelidoInformado + ":" + tDataMensagem.format(sFormatadorDataeHora));
 								}
 
 								break opcao2;
@@ -146,7 +146,7 @@ public class ProjetoBancoNoSQL {
 								System.out.println("Visualizar mensagens recebidas");
 
 								// zlexcount pois o count normal não está funcionando
-								Long contarEntrada = tJedis.zlexcount(tApelidoInformado + "-entrada  ", "-", "+");
+								Long contarEntrada = tJedis.zlexcount(tApelidoInformado + "--ent ", "-", "+");
 								System.out.println("Você tem " + contarEntrada + " mensagens!");
 
 								if (contarEntrada == 0) {
@@ -155,7 +155,7 @@ public class ProjetoBancoNoSQL {
 								} else {
 									for (int i = 0; i < contarEntrada; i++) {
 										System.out.println(
-												(1 + i) + " " + tJedis.zrange(tApelidoInformado + "-entrada  ", i, i));
+												(1 + i) + " " + tJedis.zrange(tApelidoInformado + "--ent  ", i, i));
 									}
 									System.out.println();
 
@@ -165,7 +165,7 @@ public class ProjetoBancoNoSQL {
 										break opcao2;
 									} else {
 										Set<String> tVerMensagem = tJedis.zrange(
-												tApelidoInformado + "-entrada  ", tVisualizar - 1, tVisualizar - 1);
+												tApelidoInformado + "--ent  ", tVisualizar - 1, tVisualizar - 1);
 
 										String cortarString = tVerMensagem.toString();
 										String tVerMensagem2 = cortarString.substring(1, cortarString.length() - 1);
@@ -183,9 +183,9 @@ public class ProjetoBancoNoSQL {
 										} else {
 											LocalDateTime tDataMensagem2 = LocalDateTime.now();
 
-											Long tEntradaResposta = tJedis.incr(tVerMensagem2 + "-resposta  ");
+											Long tEntradaResposta = tJedis.incr(tVerMensagem2 + "-resp  ");
 
-											tJedis.zadd(tVerMensagem2 + "-resposta  ", tEntradaResposta,
+											tJedis.zadd(tVerMensagem2 + "--resp  ", tEntradaResposta,
 													tApelidoInformado + ":"
 															+ tDataMensagem2.format(sFormatadorDataeHora));
 											String tDestinatario2 = tJedis.get(tVerMensagem2 + ":De");
@@ -203,13 +203,13 @@ public class ProjetoBancoNoSQL {
 															+ tDataMensagem2.format(sFormatadorDataeHora) + ":Mensagem",
 													tResposta);
 
-											Long tSaida2 = tJedis.incr(tApelidoInformado + "-saida");
-											tJedis.zadd(tApelidoInformado + "-saida ", tSaida2, tApelidoInformado + ":"
+											Long tSaida2 = tJedis.incr(tApelidoInformado + "--saida");
+											tJedis.zadd(tApelidoInformado + "--saida ", tSaida2, tApelidoInformado + ":"
 													+ tDataMensagem2.format(sFormatadorDataeHora));
 
-											Long tEntrada2 = tJedis.incr(tDestinatario2 + "-entrada ");
+											Long tEntrada2 = tJedis.incr(tDestinatario2 + "-ent  ");
 
-											tJedis.zadd(tDestinatario2 + "-entrada  ", tEntrada2, tApelidoInformado
+											tJedis.zadd(tDestinatario2 + "--ent  ", tEntrada2, tApelidoInformado
 													+ ":" + tDataMensagem2.format(sFormatadorDataeHora));
 
 										}
@@ -221,7 +221,7 @@ public class ProjetoBancoNoSQL {
 							case 3:
 								System.out.println("Visualizar mensagens enviadas");
 
-								Long contarSaida = tJedis.zlexcount(tApelidoInformado + "-saida ", "-", "+");
+								Long contarSaida = tJedis.zlexcount(tApelidoInformado + "--saida ", "-", "+");
 								System.out.println("Você enviou " + contarSaida + " mensagens!");
 
 								if (contarSaida == 0) {
@@ -243,7 +243,7 @@ public class ProjetoBancoNoSQL {
 										if (tVerSaida == 0 || tVerSaida < 0) {
 											break opcao2;
 										} else {
-											Set<String> tVerMensagem3 = tJedis.zrange(tApelidoInformado + "-saida ",
+											Set<String> tVerMensagem3 = tJedis.zrange(tApelidoInformado + "--saida ",
 													tVerSaida - 1, tVerSaida - 1);
 
 											String Cortar = (tVerMensagem3).toString();
@@ -252,7 +252,7 @@ public class ProjetoBancoNoSQL {
 											System.out.println("Para: " + tJedis.smembers(tVerMensagem4 + ":Para"));
 											System.out.println(tJedis.get(tVerMensagem4 + ":Mensagem"));
 
-											Long contarResposta = tJedis.zlexcount(tVerMensagem4 + "-resposta ", "-",
+											Long contarResposta = tJedis.zlexcount(tVerMensagem4 + "--resp ", "-",
 													"+");
 											System.out.println();
 											System.out.println("Você possui " + contarResposta + " respostas.");
@@ -264,7 +264,7 @@ public class ProjetoBancoNoSQL {
 
 												for (int i = 0; i < contarResposta; i++) {
 													Set<String> tVerMensagem5 = tJedis
-															.zrange(tVerMensagem4 + "-resposta ", i, i);
+															.zrange(tVerMensagem4 + "--resp ", i, i);
 
 													String Cortar2 = (tVerMensagem5.toString());
 													String tTirarChave = Cortar2.substring(1, Cortar2.length() - 1);
@@ -278,7 +278,7 @@ public class ProjetoBancoNoSQL {
 													break opcao2;
 												} else {
 													Set<String> tVerMensagem6 = tJedis.zrange(
-															tVerMensagem4 + "-resposta", tVerResposta - 1,
+															tVerMensagem4 + "--resp  ", tVerResposta - 1,
 															tVerResposta - 1);
 
 													String Cortar3 = (tVerMensagem6).toString();
